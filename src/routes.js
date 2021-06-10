@@ -1,3 +1,5 @@
+const Joi = require('@hapi/joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const {
   getAllMovies,
   getSingleMovie,
@@ -30,15 +32,21 @@ const routes = [
   },
 
   // Update the details of a movie
-  /* {
+  {
     method: 'PUT',
     path: '/movies/{id}',
+    options: {
+      validate: {
+        params: Joi.object({
+          id: Joi.objectId(),
+        }),
+      },
+    },
     handler: updateMovie,
   },
 
   // Delete a movie
-  {
-    method: 'DELETE',
+  /* method: 'DELETE',
     path: 'movies/{id}',
     handler: deleteMovie,
   },

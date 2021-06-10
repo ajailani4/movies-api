@@ -25,7 +25,7 @@ const getSingleMovie = async (request) => {
   const movie = await request.mongo.db.collection('movies')
     .findOne(
       {
-        _id: new ObjectID(id),
+        _id: ObjectID(id),
       },
     );
 
@@ -55,7 +55,32 @@ const addMovie = async (request) => {
 };
 
 // Update the details of a movie
-const updateMovie = (request, h) => 'Update a single movie';
+const updateMovie = async (request) => {
+  const { id } = request.params;
+  const { ObjectID } = request.mongo.ObjectID;
+
+  const { payload } = request;
+
+  const result = await request.mongo.db.collection('movies')
+    .updateOne(
+      {
+        _id: ObjectID(id),
+      },
+      {
+        $set: payload,
+      },
+    );
+
+  let resMessage = '';
+  if (result.modifiedCount === 1) {
+    resMessage = 'Movie has been updated';
+  }
+
+  return {
+    status: 'success',
+    message: resMessage,
+  };
+};
 
 // Delete a movie
 const deleteMovie = (request, h) => 'Delete a single movie';
