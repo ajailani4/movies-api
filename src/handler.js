@@ -38,7 +38,21 @@ const getSingleMovie = async (request) => {
 };
 
 // Add a new movie
-const addMovie = (request, h) => 'Add new movie';
+const addMovie = async (request) => {
+  const { payload } = request;
+
+  const result = await request.mongo.db.collection('movies')
+    .insertOne(payload);
+
+  const movie = result.ops[0];
+
+  return {
+    status: 'success',
+    data: {
+      movie,
+    },
+  };
+};
 
 // Update the details of a movie
 const updateMovie = (request, h) => 'Update a single movie';

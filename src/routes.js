@@ -23,14 +23,14 @@ const routes = [
   },
 
   // Add a new movie
-  /* {
+  {
     method: 'POST',
     path: '/movies',
     handler: addMovie,
   },
 
   // Update the details of a movie
-  {
+  /* {
     method: 'PUT',
     path: '/movies/{id}',
     handler: updateMovie,
