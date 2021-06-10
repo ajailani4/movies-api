@@ -20,7 +20,13 @@ const routes = [
   // Get a single movie
   {
     method: 'GET',
-    path: '/movies/{id}',
+    path: '/movies/{id}',options: {
+      validate: {
+        params: Joi.object({
+          id: Joi.objectId(),
+        }),
+      },
+    },
     handler: getSingleMovie,
   },
 
@@ -46,13 +52,21 @@ const routes = [
   },
 
   // Delete a movie
-  /* method: 'DELETE',
-    path: 'movies/{id}',
+  {
+    method: 'DELETE',
+    path: '/movies/{id}',
+    options: {
+      validate: {
+        params: Joi.object({
+          id: Joi.objectId(),
+        }),
+      },
+    },
     handler: deleteMovie,
   },
 
   // Search for a movie
-  {
+  /* {
     method: 'GET',
     path: '/search',
     handler: searhMovie,

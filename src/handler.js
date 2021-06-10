@@ -18,7 +18,7 @@ const getAllMovies = async (request) => {
 };
 
 // Get a movie
-const getSingleMovie = async (request) => {
+const getSingleMovie = async (request, h) => {
   const { id } = request.params;
   const { ObjectID } = request.mongo;
 
@@ -29,35 +29,58 @@ const getSingleMovie = async (request) => {
       },
     );
 
-  return {
-    status: 'success',
-    data: {
-      movie,
-    },
-  };
+  if (movie != null) {
+    return {
+      status: 'success',
+      data: {
+        movie,
+      },
+    };
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Note is not found',
+  });
+  response.code(404);
+
+  return response;
 };
 
 // Add a new movie
-const addMovie = async (request) => {
+const addMovie = async (request, h) => {
   const { payload } = request;
 
   const result = await request.mongo.db.collection('movies')
     .insertOne(payload);
 
-  const movie = result.ops[0];
+  if (result.insertedCount === 1) {
+    const movie = result.ops[0];
 
-  return {
-    status: 'success',
-    data: {
-      movie,
-    },
-  };
+    const response = h.response({
+      status: 'success',
+      data: {
+        movie,
+      },
+    });
+    response.code(201);
+
+    return response;
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'New moview cannot be added',
+  });
+  response.code(500);
+
+  return response;
 };
 
 // Update the details of a movie
 const updateMovie = async (request) => {
   const { id } = request.params;
-  const { ObjectID } = request.mongo.ObjectID;
+  const { ObjectID } = request.mongo;
 
   const { payload } = request;
 
@@ -83,10 +106,30 @@ const updateMovie = async (request) => {
 };
 
 // Delete a movie
-const deleteMovie = (request, h) => 'Delete a single movie';
+const deleteMovie = async (request) => {
+  const { id } = request.params;
+  const { ObjectID } = request.mongo;
+
+  const result = await request.mongo.db.collection('movies')
+    .deleteOne(
+      {
+        _id: ObjectID(id),
+      },
+    );
+
+  let resMessage = '';
+  if (result.deletedCount === 1) {
+    resMessage = 'Movie has been deleted';
+  }
+
+  return {
+    status: 'success',
+    message: resMessage,
+  };
+};
 
 // Search for a movie
-const searhMovie = (reques, h) => 'Return search results for the specified term';
+const searhMovie = (request, h) => 'Return search results for the specified term';
 
 module.exports = {
   getAllMovies,
