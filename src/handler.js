@@ -1,32 +1,53 @@
 // Get all movies
-const getAllMovies = async (request, h) => {
-  return 'Return all movies';
+const getAllMovies = async (request) => {
+  const offset = Number(request.query.offset) || 0;
+
+  const movies = await request.mongo.db.collection('movies')
+    .find({})
+    .sort({ metacritic: -1 })
+    .skip(offset)
+    .limit(20)
+    .toArray();
+
+  return {
+    status: 'success',
+    data: {
+      movies,
+    },
+  };
 };
 
 // Get a movie
-const getSingleMovie = (request, h) => {
-  return 'Return a single movie';
+const getSingleMovie = async (request) => {
+  const { id } = request.params;
+  const { ObjectID } = request.mongo;
+
+  const movie = await request.mongo.db.collection('movies')
+    .findOne(
+      {
+        _id: new ObjectID(id),
+      },
+    );
+
+  return {
+    status: 'success',
+    data: {
+      movie,
+    },
+  };
 };
 
 // Add a new movie
-const addMovie = (request, h) => {
-  return 'Add new movie';
-};
+const addMovie = (request, h) => 'Add new movie';
 
 // Update the details of a movie
-const updateMovie = (request, h) => {
-  return 'Update a single movie';
-};
+const updateMovie = (request, h) => 'Update a single movie';
 
 // Delete a movie
-const deleteMovie = (request, h) => {
-  return 'Delete a single movie';
-};
+const deleteMovie = (request, h) => 'Delete a single movie';
 
 // Search for a movie
-const searhMovie = (reques, h) => {
-  return 'Return search results for the specified term';
-};
+const searhMovie = (reques, h) => 'Return search results for the specified term';
 
 module.exports = {
   getAllMovies,

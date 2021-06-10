@@ -16,11 +16,11 @@ const routes = [
   },
 
   // Get a single movie
-  /* {
+  {
     method: 'GET',
     path: '/movies/{id}',
     handler: getSingleMovie,
-  }, */
+  },
 
   // Add a new movie
   /* {
