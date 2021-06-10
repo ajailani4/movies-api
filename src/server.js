@@ -11,7 +11,7 @@ const init = async () => {
     host: 'localhost',
   });
 
-  // Configure hapi-mongodb
+  // Configure MongoDb
   await server.register({
     plugin: mongoDb,
     options: {
