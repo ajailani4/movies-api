@@ -6,7 +6,7 @@ const {
   addMovie,
   updateMovie,
   deleteMovie,
-  searhMovie,
+  searchMovie,
 } = require('./handler');
 
 const routes = [
@@ -20,7 +20,8 @@ const routes = [
   // Get a single movie
   {
     method: 'GET',
-    path: '/movies/{id}',options: {
+    path: '/movies/{id}',
+    options: {
       validate: {
         params: Joi.object({
           id: Joi.objectId(),
@@ -66,11 +67,11 @@ const routes = [
   },
 
   // Search for a movie
-  /* {
+  {
     method: 'GET',
     path: '/search',
-    handler: searhMovie,
-  }, */
+    handler: searchMovie,
+  },
 ];
 
 module.exports = routes;

@@ -129,7 +129,37 @@ const deleteMovie = async (request) => {
 };
 
 // Search for a movie
-const searhMovie = (request, h) => 'Return search results for the specified term';
+const searchMovie = async (request) => {
+  const { keyword } = request.query;
+
+  const result = await request.mongo.db.collection('movies')
+    .aggregate([
+      {
+        $search: {
+          search: {
+            query: keyword,
+            path: 'title',
+          },
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          plot: 1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+    ]).toArray();
+
+  return {
+    status: 'success',
+    data: {
+      result,
+    },
+  };
+};
 
 module.exports = {
   getAllMovies,
@@ -137,5 +167,5 @@ module.exports = {
   addMovie,
   updateMovie,
   deleteMovie,
-  searhMovie,
+  searchMovie,
 };
